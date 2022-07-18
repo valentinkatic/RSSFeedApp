@@ -15,7 +15,9 @@ buildscript {
 
         ver.retrofit = "2.9.0"
         ver.retrofit_okhttp = "4.9.1"
-        ver.moshi = "1.13.0"
+        ver.timber = "5.0.1"
+        ver.dagger = "2.42"
+        ver.tikXml = "0.8.13"
     }
 }
 

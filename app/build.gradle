@@ -37,6 +37,8 @@ android {
 
 dependencies {
     implementation "androidx.core:core-ktx:${ver.kotlin_core_ktx}"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${ver.kotlin_coroutines}"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${ver.kotlin_coroutines}"
 
     implementation "com.google.android.material:material:${ver.material}"
     implementation "androidx.appcompat:appcompat:${ver.appcompat}"
@@ -47,12 +49,15 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:${ver.glide}"
 
     implementation "com.squareup.retrofit2:retrofit:${ver.retrofit}"
-    implementation "com.squareup.retrofit2:converter-moshi:${ver.retrofit}"
-    implementation "com.squareup.retrofit2:converter-simplexml:${ver.retrofit}"
     implementation "com.squareup.okhttp3:logging-interceptor:${ver.retrofit_okhttp}"
+    implementation "com.jakewharton.timber:timber:${ver.timber}"
+    implementation "com.google.dagger:dagger:${ver.dagger}"
+    kapt "com.google.dagger:dagger-compiler:${ver.dagger}"
 
-    implementation "com.squareup.moshi:moshi:${ver.moshi}"
-    kapt "com.squareup.moshi:moshi-kotlin-codegen:${ver.moshi}"
+    implementation "com.tickaroo.tikxml:annotation:${ver.tikXml}"
+    implementation "com.tickaroo.tikxml:core:${ver.tikXml}"
+    implementation "com.tickaroo.tikxml:retrofit-converter:${ver.tikXml}"
+    kapt "com.tickaroo.tikxml:processor:${ver.tikXml}"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
