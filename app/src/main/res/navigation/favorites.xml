@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/favoritesScreen"
-        android:name="com.katic.rssfeedapp.ui.favorites.FavoritesFragment"
+        android:name="com.katic.rssfeedapp.ui.channels.FavoritesFragment"
         android:label="@string/title_favorites"
         tools:layout="@layout/fragment_favorites" />
 

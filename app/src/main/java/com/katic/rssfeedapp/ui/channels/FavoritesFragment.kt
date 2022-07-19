@@ -1,4 +1,4 @@
-package com.katic.rssfeedapp.ui.favorites
+package com.katic.rssfeedapp.ui.channels
 
 import android.os.Bundle
 import android.view.LayoutInflater

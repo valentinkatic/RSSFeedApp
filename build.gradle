@@ -19,6 +19,10 @@ buildscript {
         ver.dagger = "2.42"
         ver.tikXml = "0.8.13"
     }
+
+    dependencies {
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:${ver.navigationKtx}"
+    }
 }
 
 plugins {

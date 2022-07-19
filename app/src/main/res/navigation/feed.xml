@@ -3,12 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/feed"
-    app:startDestination="@id/feedScreen">
+    app:startDestination="@id/channelsScreen">
 
     <fragment
-        android:id="@+id/feedScreen"
-        android:name="com.katic.rssfeedapp.ui.feed.FeedFragment"
-        android:label="@string/title_feed"
-        tools:layout="@layout/fragment_feed" />
+        android:id="@+id/channelsScreen"
+        android:name="com.katic.rssfeedapp.ui.channels.RssChannelsFragment"
+        android:label="@string/title_rss_feed"
+        tools:layout="@layout/fragment_list">
+        <action
+            android:id="@+id/action_channel_to_items"
+            app:destination="@id/itemsScreen" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/itemsScreen"
+        android:name="com.katic.rssfeedapp.ui.items.RssItemsFragment"
+        android:label="{title}"
+        tools:layout="@layout/fragment_list">
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

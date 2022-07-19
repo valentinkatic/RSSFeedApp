@@ -2,6 +2,7 @@ package com.katic.rssfeedapp.di
 
 import android.content.Context
 import com.katic.rssfeedapp.data.RssRepository
+import com.katic.rssfeedapp.ui.home.HomeViewModel
 import dagger.BindsInstance
 import dagger.Component
 import okhttp3.OkHttpClient
@@ -21,5 +22,7 @@ interface AppComponent {
     val okHttpClient: OkHttpClient
 
     val rssRepository: RssRepository
+
+    val homeViewModel: HomeViewModel
 
 }

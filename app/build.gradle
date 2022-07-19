@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 android {
@@ -47,6 +48,7 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:${ver.navigationKtx}"
 
     implementation "com.github.bumptech.glide:glide:${ver.glide}"
+    kapt "com.github.bumptech.glide:compiler:${ver.glide}"
 
     implementation "com.squareup.retrofit2:retrofit:${ver.retrofit}"
     implementation "com.squareup.okhttp3:logging-interceptor:${ver.retrofit_okhttp}"

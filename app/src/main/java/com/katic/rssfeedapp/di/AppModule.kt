@@ -2,6 +2,7 @@ package com.katic.rssfeedapp.di
 
 import com.katic.rssfeedapp.data.RssRepository
 import com.katic.rssfeedapp.data.RssService
+import com.katic.rssfeedapp.utils.DateConverter
 import com.tickaroo.tikxml.TikXml
 import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
 import dagger.Module
@@ -10,6 +11,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import timber.log.Timber
+import java.util.*
 import javax.inject.Singleton
 
 @Module
@@ -37,6 +39,7 @@ class AppModule {
     fun provideTikXml(): TikXml {
         return TikXml.Builder()
             .exceptionOnUnreadXml(false)
+            .addTypeConverter(Date::class.java, DateConverter())
             .build()
     }
 

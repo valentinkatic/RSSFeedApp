@@ -3,9 +3,9 @@
 
     <item
         android:id="@+id/feed"
-        android:contentDescription="@string/title_feed"
+        android:contentDescription="@string/title_rss_feed"
         android:icon="@drawable/ic_rss_feed"
-        android:title="@string/title_feed" />
+        android:title="@string/title_rss_feed" />
 
     <item
         android:id="@+id/favorites"
