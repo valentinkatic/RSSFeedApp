@@ -1,3 +1,8 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    
+    <dimen name="input_dialog_horizontal_margin">20dp</dimen>
+    <dimen name="input_dialog_top_margin">10dp</dimen>
+    <dimen name="input_dialog_bottom_margin">4dp</dimen>
+
 </resources>

@@ -9,7 +9,7 @@
         android:id="@+id/channelsScreen"
         android:name="com.katic.rssfeedapp.ui.channels.RssChannelsFragment"
         android:label="@string/title_rss_feed"
-        tools:layout="@layout/fragment_list">
+        tools:layout="@layout/fragment_rss_channels">
         <action
             android:id="@+id/action_channel_to_items"
             app:destination="@id/itemsScreen"
@@ -23,7 +23,7 @@
         android:id="@+id/itemsScreen"
         android:name="com.katic.rssfeedapp.ui.items.RssItemsFragment"
         android:label="{title}"
-        tools:layout="@layout/fragment_list">
+        tools:layout="@layout/fragment_rss_items">
         <argument
             android:name="title"
             app:argType="string" />

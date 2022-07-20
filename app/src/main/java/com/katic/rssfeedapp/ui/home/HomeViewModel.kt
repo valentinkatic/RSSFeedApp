@@ -21,16 +21,19 @@ class HomeViewModel @Inject constructor(private val repository: RssRepository) :
     val selectedRssChannel: LiveData<RssChannel> get() = _selectedRssChannel
     private val _selectedRssChannel = MutableLiveData<RssChannel>()
 
+    private var removedChannel: RssChannel? = null
+
     private var job: Job? = null
 
-    fun getMockFeed() {
-        Timber.d("getMockFeed")
+    fun fetchDummyRssFeed() {
+        Timber.d("fetchDummyRssFeed")
 
         _rssChannelResult.value = LoadingResult.loading(_rssChannelResult.value)
 
         val urls = listOf(
             "https://medium.com/feed/mobile-app-development-publication",
-            "https://www.nasa.gov/rss/dyn/breaking_news.rss"
+            "https://www.nasa.gov/rss/dyn/breaking_news.rss",
+            "https://rss.art19.com/apology-line"
         )
 
         job?.cancel()
@@ -39,25 +42,25 @@ class HomeViewModel @Inject constructor(private val repository: RssRepository) :
             runCatchCancel(
                 run = {
                     val channels = mutableListOf<RssChannel>()
-                    urls.forEach {
-                        val channel = repository.getChannelFeed(it)
+                    for (url in urls) {
+                        val channel = repository.getChannelFeed(url)
                         channels.add(channel)
                     }
                     _rssChannelResult.value = LoadingResult.loaded(channels)
                 },
                 catch = { t ->
-                    Timber.e(t, "getMockFeed error")
+                    Timber.e(t, "fetchDummyRssFeed error")
                     _rssChannelResult.value = LoadingResult.exception(_rssChannelResult.value, t)
                 },
                 cancel = {
-                    Timber.i("getMockFeed canceled")
+                    Timber.i("fetchDummyRssFeed canceled")
                 }
             )
         }
     }
 
-    fun getFeed(url: String) {
-        Timber.d("getFeed")
+    fun getRssFeed(url: String) {
+        Timber.d("getRssFeed")
 
         job?.cancel()
 
@@ -67,26 +70,47 @@ class HomeViewModel @Inject constructor(private val repository: RssRepository) :
             runCatchCancel(
                 run = {
                     val channel = repository.getChannelFeed(url)
-
-                    val channels: MutableList<RssChannel> =
-                        (rssChannelResult.value?.data ?: emptyList()).toMutableList()
-                    channels.add(channel)
+                    val channels = addRssChannel(channel)
                     _rssChannelResult.value = LoadingResult.loaded(channels)
                 },
                 catch = { t ->
-                    Timber.e(t, "getFeed error")
+                    Timber.e(t, "getRssFeed error")
                     _rssChannelResult.value = LoadingResult.exception(_rssChannelResult.value, t)
                 },
                 cancel = {
-                    Timber.i("getFeed canceled")
+                    Timber.i("getRssFeed canceled")
                 }
             )
         }
     }
 
-    fun setSelectedChannel(rssChannel: RssChannel) {
-        Timber.d("setSelectedChannel: $rssChannel")
+    fun setSelectedRssChannel(rssChannel: RssChannel) {
+        Timber.d("setSelectedRssChannel: ${rssChannel.link}")
         _selectedRssChannel.value = rssChannel
+    }
+
+    private fun addRssChannel(rssChannel: RssChannel): List<RssChannel> {
+        Timber.d("addRssChannel: ${rssChannel.link}")
+        val channels = (rssChannelResult.value?.data ?: emptyList()).toMutableList()
+        channels.add(rssChannel)
+        return channels
+    }
+
+    fun removeRssChannel(index: Int) {
+        Timber.d("removeRssChannel: $index")
+        val channels = (rssChannelResult.value?.data ?: emptyList()).toMutableList()
+        if (channels.size <= index) return
+        removedChannel = channels[index]
+        channels.removeAt(index)
+        _rssChannelResult.value = LoadingResult.loaded(channels)
+    }
+
+    fun undoRemove(index: Int) {
+        Timber.d("undoRemove: $index")
+        val channels = (rssChannelResult.value?.data ?: emptyList()).toMutableList()
+        if (channels.size < index || removedChannel == null) return
+        channels.add(index, removedChannel!!)
+        _rssChannelResult.value = LoadingResult.loaded(channels)
     }
 
     override fun onCleared() {

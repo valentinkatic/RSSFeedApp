@@ -22,7 +22,7 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.getMockFeed()
+        viewModel.fetchDummyRssFeed()
 
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)

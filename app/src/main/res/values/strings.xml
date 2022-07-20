@@ -5,6 +5,17 @@
     <string name="title_rss_feed">RSS Feed</string>
     <string name="title_favorites">Favorites</string>
 
+    <string name="dialog_rss_feed_url_title">Enter RSS Feed URL</string>
+
+    <string name="error">Error</string>
+    <string name="general_error">\"An error occurred, please try again.\"</string>
+    <string name="service_error">\"Service error. Please, try again.\"</string>
+
     <string name="published">Published: %s</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="undo">Undo</string>
+
+    <string name="channel_removed">RSS Channel removed</string>
 
 </resources>

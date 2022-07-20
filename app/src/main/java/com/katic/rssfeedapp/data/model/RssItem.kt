@@ -12,7 +12,7 @@ data class RssItem(
     @PropertyElement
     val description: String,
     @PropertyElement
-    val link: String,
+    val link: String?,
     @PropertyElement(name = "pubDate")
     val published: Date?,
     @Element

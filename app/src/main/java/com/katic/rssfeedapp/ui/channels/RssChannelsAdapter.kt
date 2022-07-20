@@ -2,6 +2,7 @@ package com.katic.rssfeedapp.ui.channels
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.katic.rssfeedapp.R
 import com.katic.rssfeedapp.data.model.RssChannel
@@ -25,12 +26,20 @@ class RssChannelsAdapter(val listener: Listener) :
 
             binding.apply {
                 title.text = channel.title
-                description.text = channel.description
+
+                val styledText = HtmlCompat.fromHtml(
+                    channel.description,
+                    HtmlCompat.FROM_HTML_MODE_COMPACT,
+                    null,
+                    null
+                )
+
+                description.text = styledText
 
                 GlideApp.with(itemView.context)
                     .load(channel.image?.url)
-                    .placeholder(R.drawable.placeholder)
-                    .error(R.drawable.placeholder)
+                    .placeholder(R.drawable.ic_rss_feed)
+                    .error(R.drawable.ic_rss_feed)
                     .into(thumbnail)
 
                 root.setOnClickListener { listener.onChannelSelected(channel) }
@@ -49,8 +58,8 @@ class RssChannelsAdapter(val listener: Listener) :
         holder.bind(position)
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return channels[position].link.hashCode()
+    override fun getItemId(position: Int): Long {
+        return channels[position].link.hashCode().toLong()
     }
 
     fun swapData(rssChannels: List<RssChannel>) {

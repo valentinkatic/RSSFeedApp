@@ -8,16 +8,19 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
+import com.katic.rssfeedapp.R
 import com.katic.rssfeedapp.data.model.RssChannel
-import com.katic.rssfeedapp.databinding.FragmentListBinding
+import com.katic.rssfeedapp.databinding.FragmentRssChannelsBinding
 import com.katic.rssfeedapp.ui.home.HomeViewModel
 import com.katic.rssfeedapp.utils.UiUtils
+import com.katic.rssfeedapp.utils.addOnRemovedListener
 import com.katic.rssfeedapp.utils.viewModelProviderActivity
 import timber.log.Timber
 
 class RssChannelsFragment : Fragment(), RssChannelsAdapter.Listener {
 
-    private var _binding: FragmentListBinding? = null
+    private var _binding: FragmentRssChannelsBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel by viewModelProviderActivity<HomeViewModel>()
@@ -28,7 +31,7 @@ class RssChannelsFragment : Fragment(), RssChannelsAdapter.Listener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentListBinding.inflate(inflater, container, false)
+        _binding = FragmentRssChannelsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -40,6 +43,26 @@ class RssChannelsFragment : Fragment(), RssChannelsAdapter.Listener {
             layoutManager = llm
             addItemDecoration(DividerItemDecoration(context, llm.orientation))
             adapter = rssChannelsAdapter
+
+            addOnRemovedListener { position ->
+                Snackbar.make(
+                    view, R.string.channel_removed, Snackbar.LENGTH_LONG
+                ).setAction(R.string.undo) {
+                    viewModel.undoRemove(position)
+                }.show()
+                viewModel.removeRssChannel(position)
+            }
+        }
+
+        binding.fab.setOnClickListener {
+            UiUtils.showInputDialog(
+                view.context,
+                title = R.string.dialog_rss_feed_url_title,
+                listener = {
+                    if (it?.isNotBlank() != true) return@showInputDialog
+                    viewModel.getRssFeed(it)
+                }
+            )
         }
 
         observeViewModel()
@@ -51,7 +74,7 @@ class RssChannelsFragment : Fragment(), RssChannelsAdapter.Listener {
                 it.isLoading -> binding.progressBar.show()
                 it.isError -> {
                     binding.progressBar.hide()
-                    UiUtils.handleUiError(activity, it.getException())
+                    UiUtils.handleUiError(context, it.getException())
                 }
                 else -> {
                     binding.progressBar.hide()
@@ -75,7 +98,7 @@ class RssChannelsFragment : Fragment(), RssChannelsAdapter.Listener {
 
     override fun onChannelSelected(channel: RssChannel) {
         Timber.d("onChannelSelected: $channel")
-        viewModel.setSelectedChannel(channel)
+        viewModel.setSelectedRssChannel(channel)
         val items = RssChannelsFragmentDirections.actionChannelToItems(channel.title)
         findNavController().navigate(items)
     }
