@@ -67,6 +67,11 @@ class RssChannelsAdapter(val listener: Listener) :
         notifyDataSetChanged()
     }
 
+    fun getChannelOnPosition(position: Int): RssChannel? {
+        if (position >= itemCount) return null
+        return channels[position]
+    }
+
     interface Listener {
         fun onChannelSelected(channel: RssChannel)
     }

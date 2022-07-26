@@ -45,8 +45,12 @@ class RssChannelsFragment : Fragment(), RssChannelsAdapter.Listener {
             adapter = rssChannelsAdapter
 
             addOnRemovedListener { position ->
+                val channel =
+                    rssChannelsAdapter.getChannelOnPosition(position) ?: return@addOnRemovedListener
                 Snackbar.make(
-                    view, R.string.channel_removed, Snackbar.LENGTH_LONG
+                    view,
+                    UiUtils.formatRemovedRssChannelMessage(context, channel),
+                    Snackbar.LENGTH_LONG
                 ).setAction(R.string.undo) {
                     viewModel.undoRemove(position)
                 }.show()

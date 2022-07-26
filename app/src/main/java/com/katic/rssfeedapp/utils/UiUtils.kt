@@ -12,6 +12,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.updateMargins
 import com.katic.rssfeedapp.R
+import com.katic.rssfeedapp.data.model.RssChannel
 import org.json.JSONObject
 import retrofit2.HttpException
 import timber.log.Timber
@@ -107,6 +108,13 @@ class UiUtils {
             return if (date == null) "" else String.format(
                 context.getString(R.string.published),
                 date.formatRssDate()
+            )
+        }
+
+        fun formatRemovedRssChannelMessage(context: Context, rssChannel: RssChannel): String {
+            return String.format(
+                context.getString(R.string.channel_removed),
+                rssChannel.title
             )
         }
     }
