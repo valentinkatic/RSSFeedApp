@@ -61,6 +61,10 @@ dependencies {
     implementation "com.tickaroo.tikxml:retrofit-converter:${ver.tikXml}"
     kapt "com.tickaroo.tikxml:processor:${ver.tikXml}"
 
+    implementation("androidx.room:room-runtime:${ver.roomVersion}")
+    kapt("androidx.room:room-compiler:${ver.roomVersion}")
+    implementation("androidx.room:room-ktx:${ver.roomVersion}")
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'

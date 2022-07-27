@@ -18,6 +18,7 @@ buildscript {
         ver.timber = "5.0.1"
         ver.dagger = "2.42"
         ver.tikXml = "0.8.13"
+        ver.roomVersion = "2.4.2"
     }
 
     dependencies {

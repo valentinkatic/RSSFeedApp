@@ -9,6 +9,27 @@
         android:id="@+id/favoritesScreen"
         android:name="com.katic.rssfeedapp.ui.channels.FavoritesFragment"
         android:label="@string/title_favorites"
-        tools:layout="@layout/fragment_favorites" />
+        tools:layout="@layout/fragment_favorites">
+        <action
+            android:id="@+id/action_favorites_to_items"
+            app:destination="@id/itemsScreen"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/itemsScreen"
+        android:name="com.katic.rssfeedapp.ui.items.RssItemsFragment"
+        android:label="{title}"
+        tools:layout="@layout/fragment_rss_items">
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="channel_id"
+            app:argType="long" />
+    </fragment>
 
 </navigation>

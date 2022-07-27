@@ -2,6 +2,7 @@ package com.katic.rssfeedapp.ui.channels
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.katic.rssfeedapp.R
@@ -42,6 +43,17 @@ class RssChannelsAdapter(val listener: Listener) :
                     .error(R.drawable.ic_rss_feed)
                     .into(thumbnail)
 
+                val drawable = ContextCompat.getDrawable(
+                    itemView.context,
+                    if (channel.favorite) R.drawable.ic_favorite else R.drawable.ic_not_favorite
+                )
+                favorite.setImageDrawable(drawable)
+                favorite.setOnClickListener {
+                    channel.favorite = !channel.favorite
+                    notifyItemChanged(position)
+                    listener.onAddedToFavorites(channel)
+                }
+
                 root.setOnClickListener { listener.onChannelSelected(channel) }
             }
         }
@@ -59,7 +71,7 @@ class RssChannelsAdapter(val listener: Listener) :
     }
 
     override fun getItemId(position: Int): Long {
-        return channels[position].link.hashCode().toLong()
+        return channels[position].id ?: -1
     }
 
     fun swapData(rssChannels: List<RssChannel>) {
@@ -74,5 +86,7 @@ class RssChannelsAdapter(val listener: Listener) :
 
     interface Listener {
         fun onChannelSelected(channel: RssChannel)
+
+        fun onAddedToFavorites(channel: RssChannel)
     }
 }

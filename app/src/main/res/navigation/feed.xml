@@ -27,6 +27,9 @@
         <argument
             android:name="title"
             app:argType="string" />
+        <argument
+            android:name="channel_id"
+            app:argType="long" />
     </fragment>
 
 </navigation>

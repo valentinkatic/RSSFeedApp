@@ -1,8 +1,10 @@
 package com.katic.rssfeedapp.di
 
+import android.content.Context
+import androidx.room.Room
 import com.katic.rssfeedapp.data.RssRepository
 import com.katic.rssfeedapp.data.RssService
-import com.katic.rssfeedapp.utils.DateConverter
+import com.katic.rssfeedapp.data.db.RssDatabase
 import com.tickaroo.tikxml.TikXml
 import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
 import dagger.Module
@@ -11,7 +13,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import timber.log.Timber
-import java.util.*
 import javax.inject.Singleton
 
 @Module
@@ -39,11 +40,11 @@ class AppModule {
     fun provideTikXml(): TikXml {
         return TikXml.Builder()
             .exceptionOnUnreadXml(false)
-            .addTypeConverter(Date::class.java, DateConverter())
             .build()
     }
 
     @Provides
+    @Singleton
     fun provideRssService(
         client: OkHttpClient,
         tikXml: TikXml
@@ -57,7 +58,17 @@ class AppModule {
     }
 
     @Provides
-    fun provideRssRepository(rssService: RssService) =
-        RssRepository(rssService)
+    @Singleton
+    fun provideRssDatabase(applicationContext: Context): RssDatabase =
+        Room.databaseBuilder(
+            applicationContext,
+            RssDatabase::class.java,
+            "rssfeed"
+        ).build()
+
+    @Provides
+    @Singleton
+    fun provideRssRepository(rssService: RssService, rssDatabase: RssDatabase) =
+        RssRepository(rssService, rssDatabase)
 
 }

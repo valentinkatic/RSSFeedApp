@@ -1,20 +1,47 @@
 package com.katic.rssfeedapp.data.model
 
-import com.tickaroo.tikxml.annotation.Element
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
+import com.katic.rssfeedapp.utils.DateConverter
+import com.tickaroo.tikxml.annotation.Attribute
 import com.tickaroo.tikxml.annotation.PropertyElement
 import com.tickaroo.tikxml.annotation.Xml
-import java.util.*
 
 @Xml(name = "item")
+@Entity(
+    tableName = "items", foreignKeys = [ForeignKey(
+        entity = RssChannel::class,
+        parentColumns = arrayOf("id"),
+        childColumns = arrayOf("channel_id"),
+        onDelete = ForeignKey.CASCADE
+    )],
+    primaryKeys = ["title", "description"],
+    indices = [Index("channel_id")]
+)
 data class RssItem(
+    @Attribute
+    @ColumnInfo(name = "channel_id")
+    var channelId: Long? = null,
+
     @PropertyElement
     val title: String,
+
     @PropertyElement
     val description: String,
+
     @PropertyElement
     val link: String?,
-    @PropertyElement(name = "pubDate")
-    val published: Date?,
-    @Element
-    val category: List<ItemCategory>?
-)
+
+    @PropertyElement(name = "pubDate", converter = DateConverter::class)
+    @ColumnInfo(name = "pub_date")
+    val published: Long?,
+
+//    @Element
+//    val category: List<ItemCategory>?
+) {
+    override fun toString(): String {
+        return "RssItem(channelId=$channelId, title='$title', description='${description.length}', link=$link, published=$published)"
+    }
+}

@@ -1,19 +1,40 @@
 package com.katic.rssfeedapp.data.model
 
+import androidx.room.*
+import com.tickaroo.tikxml.annotation.Attribute
 import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.PropertyElement
 import com.tickaroo.tikxml.annotation.Xml
 
 @Xml(name = "channel")
-data class RssChannel(
+@Entity(tableName = "channels", indices = [Index("link", unique = true), Index("favorite")])
+class RssChannel {
+    @PrimaryKey(autoGenerate = true)
+    @Attribute
+    var id: Long? = null
+
     @PropertyElement
-    val title: String,
+    lateinit var title: String
+
     @PropertyElement
-    val description: String,
+    lateinit var description: String
+
     @PropertyElement
-    val link: String,
+    lateinit var link: String
+
     @Element
-    val image: RssImage?,
+    @Embedded
+    var image: RssImage? = null
+
     @Element
-    val item: List<RssItem>?
-)
+    @Ignore
+    var item: List<RssItem>? = null
+
+    @Attribute
+    var favorite: Boolean = false
+
+    override fun toString(): String {
+        return "RssChannel(id=$id, title='$title', description='$description', link='$link', image=$image, item=${item?.size ?: 0}, favorite=$favorite)"
+    }
+
+}

@@ -7,20 +7,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.katic.rssfeedapp.appComponent
 import com.katic.rssfeedapp.data.model.RssItem
 import com.katic.rssfeedapp.databinding.FragmentRssItemsBinding
-import com.katic.rssfeedapp.ui.home.HomeViewModel
-import com.katic.rssfeedapp.utils.viewModelProviderActivity
+import com.katic.rssfeedapp.utils.viewModelProvider
 import timber.log.Timber
 
 class RssItemsFragment : Fragment(), RssItemsAdapter.Listener {
 
+    private val args: RssItemsFragmentArgs by navArgs()
+
     private var _binding: FragmentRssItemsBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel by viewModelProviderActivity<HomeViewModel>()
+    private val viewModel by viewModelProvider {
+        RssItemsViewModel(appComponent.rssRepository, args.channelId)
+    }
 
     private val rssItemsAdapter = RssItemsAdapter(this)
 
@@ -46,11 +51,12 @@ class RssItemsFragment : Fragment(), RssItemsAdapter.Listener {
     }
 
     private fun observeViewModel() {
-        viewModel.selectedRssChannel.observe(viewLifecycleOwner) {
-            if (it.item == null) {
+        viewModel.rssChannelAndItemsResult.observe(viewLifecycleOwner) { rssChannelAndItems ->
+            Timber.d("rssChannelAndItemsResult: $rssChannelAndItems")
+            if (rssChannelAndItems == null) {
                 return@observe
             }
-            rssItemsAdapter.swapData(it.item)
+            rssItemsAdapter.swapData(rssChannelAndItems.items)
         }
     }
 

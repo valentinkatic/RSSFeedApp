@@ -104,10 +104,10 @@ class UiUtils {
                 }
         }
 
-        fun formatPublishedDate(context: Context, date: Date?): String {
+        fun formatPublishedDate(context: Context, date: Long?): String {
             return if (date == null) "" else String.format(
                 context.getString(R.string.published),
-                date.formatRssDate()
+                Date(date).formatRssDate()
             )
         }
 

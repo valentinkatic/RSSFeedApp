@@ -1,13 +1,14 @@
 package com.katic.rssfeedapp.ui.home
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.katic.rssfeedapp.data.RssRepository
 import com.katic.rssfeedapp.data.model.RssChannel
+import com.katic.rssfeedapp.data.model.RssChannelAndItems
 import com.katic.rssfeedapp.utils.LoadingResult
-import com.katic.rssfeedapp.utils.runCatchCancel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -15,22 +16,21 @@ import javax.inject.Inject
 
 class HomeViewModel @Inject constructor(private val repository: RssRepository) : ViewModel() {
 
-    val rssChannelResult: LiveData<LoadingResult<List<RssChannel>>> get() = _rssChannelResult
-    private val _rssChannelResult = MutableLiveData<LoadingResult<List<RssChannel>>>()
+    val rssChannelResult: LiveData<LoadingResult<List<RssChannel>>> get() = repository.rssChannelResult
 
-    val selectedRssChannel: LiveData<RssChannel> get() = _selectedRssChannel
-    private val _selectedRssChannel = MutableLiveData<RssChannel>()
+    val favoriteRssChannelResult: LiveData<List<RssChannel>>
+        get() = Transformations.map(rssChannelResult) {
+            it.data?.filter { channel -> channel.favorite } ?: emptyList()
+        }
 
-    private var removedChannel: RssChannel? = null
+    private var removedChannel: RssChannelAndItems? = null
 
     private var job: Job? = null
 
     fun fetchDummyRssFeed() {
         Timber.d("fetchDummyRssFeed")
 
-        _rssChannelResult.value = LoadingResult.loading(_rssChannelResult.value)
-
-        val urls = listOf(
+        val urls = arrayOf(
             "https://medium.com/feed/mobile-app-development-publication",
             "https://www.nasa.gov/rss/dyn/breaking_news.rss",
             "https://rss.art19.com/apology-line"
@@ -38,24 +38,8 @@ class HomeViewModel @Inject constructor(private val repository: RssRepository) :
 
         job?.cancel()
 
-        job = viewModelScope.launch {
-            runCatchCancel(
-                run = {
-                    val channels = mutableListOf<RssChannel>()
-                    for (url in urls) {
-                        val channel = repository.getChannelFeed(url)
-                        channels.add(channel)
-                    }
-                    _rssChannelResult.value = LoadingResult.loaded(channels)
-                },
-                catch = { t ->
-                    Timber.e(t, "fetchDummyRssFeed error")
-                    _rssChannelResult.value = LoadingResult.exception(_rssChannelResult.value, t)
-                },
-                cancel = {
-                    Timber.i("fetchDummyRssFeed canceled")
-                }
-            )
+        job = viewModelScope.launch(Dispatchers.IO) {
+            repository.getChannelFeed(*urls)
         }
     }
 
@@ -64,53 +48,34 @@ class HomeViewModel @Inject constructor(private val repository: RssRepository) :
 
         job?.cancel()
 
-        _rssChannelResult.value = LoadingResult.loading(_rssChannelResult.value)
-
         job = viewModelScope.launch {
-            runCatchCancel(
-                run = {
-                    val channel = repository.getChannelFeed(url)
-                    val channels = addRssChannel(channel)
-                    _rssChannelResult.value = LoadingResult.loaded(channels)
-                },
-                catch = { t ->
-                    Timber.e(t, "getRssFeed error")
-                    _rssChannelResult.value = LoadingResult.exception(_rssChannelResult.value, t)
-                },
-                cancel = {
-                    Timber.i("getRssFeed canceled")
-                }
-            )
+            repository.getChannelFeed(url)
         }
     }
 
-    fun setSelectedRssChannel(rssChannel: RssChannel) {
-        Timber.d("setSelectedRssChannel: ${rssChannel.link}")
-        _selectedRssChannel.value = rssChannel
+    fun removeRssChannel(channel: RssChannel) {
+        Timber.d("removeRssChannel: $channel")
+        viewModelScope.launch(Dispatchers.IO) {
+            removedChannel = repository.getChannelAndItems(channel.id!!)
+            repository.removeChannel(channel)
+        }
     }
 
-    private fun addRssChannel(rssChannel: RssChannel): List<RssChannel> {
-        Timber.d("addRssChannel: ${rssChannel.link}")
-        val channels = (rssChannelResult.value?.data ?: emptyList()).toMutableList()
-        channels.add(rssChannel)
-        return channels
+    fun undoRemove() {
+        Timber.d("undoRemove: $removedChannel")
+        if (removedChannel == null) return
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insertChannel(removedChannel!!)
+            removedChannel = null
+        }
     }
 
-    fun removeRssChannel(index: Int) {
-        Timber.d("removeRssChannel: $index")
-        val channels = (rssChannelResult.value?.data ?: emptyList()).toMutableList()
-        if (channels.size <= index) return
-        removedChannel = channels[index]
-        channels.removeAt(index)
-        _rssChannelResult.value = LoadingResult.loaded(channels)
-    }
-
-    fun undoRemove(index: Int) {
-        Timber.d("undoRemove: $index")
-        val channels = (rssChannelResult.value?.data ?: emptyList()).toMutableList()
-        if (channels.size < index || removedChannel == null) return
-        channels.add(index, removedChannel!!)
-        _rssChannelResult.value = LoadingResult.loaded(channels)
+    fun addToFavorites(channel: RssChannel) {
+        Timber.d("addToFavorites: $channel")
+        if (channel.id == null) return
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.setChannelFavorite(channel.id!!, channel.favorite)
+        }
     }
 
     override fun onCleared() {

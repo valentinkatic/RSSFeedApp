@@ -5,7 +5,7 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DateConverter : TypeConverter<Date> {
+class DateConverter : TypeConverter<Long> {
 
     companion object {
         private const val RSS_DATE_FORMAT = "E, dd MMM yyyy HH:mm:ss Z"
@@ -14,13 +14,14 @@ class DateConverter : TypeConverter<Date> {
     }
 
     @Throws(Exception::class)
-    override fun read(value: String?): Date? {
+    override fun read(value: String?): Long? {
         if (value == null) {
             return null
         }
         for (pattern in SUPPORTED_RSS_DATE_FORMATS) {
             try {
-                return SimpleDateFormat(pattern, Locale.US).parse(value)
+                val date = SimpleDateFormat(pattern, Locale.US).parse(value)
+                return date?.time
             } catch (e: ParseException) {
                 // try the next one
             }
@@ -29,9 +30,9 @@ class DateConverter : TypeConverter<Date> {
     }
 
     @Throws(Exception::class)
-    override fun write(value: Date?): String? {
+    override fun write(value: Long?): String? {
         val formatter = SimpleDateFormat(RSS_DATE_FORMAT, Locale.US)
-        return formatter.format(value ?: return null)
+        return formatter.format(Date(value ?: return null))
     }
 
 }

@@ -52,9 +52,9 @@ class RssChannelsFragment : Fragment(), RssChannelsAdapter.Listener {
                     UiUtils.formatRemovedRssChannelMessage(context, channel),
                     Snackbar.LENGTH_LONG
                 ).setAction(R.string.undo) {
-                    viewModel.undoRemove(position)
+                    viewModel.undoRemove()
                 }.show()
-                viewModel.removeRssChannel(position)
+                viewModel.removeRssChannel(channel)
             }
         }
 
@@ -102,8 +102,12 @@ class RssChannelsFragment : Fragment(), RssChannelsAdapter.Listener {
 
     override fun onChannelSelected(channel: RssChannel) {
         Timber.d("onChannelSelected: $channel")
-        viewModel.setSelectedRssChannel(channel)
-        val items = RssChannelsFragmentDirections.actionChannelToItems(channel.title)
+        val items = RssChannelsFragmentDirections.actionChannelToItems(channel.title, channel.id!!)
         findNavController().navigate(items)
+    }
+
+    override fun onAddedToFavorites(channel: RssChannel) {
+        Timber.d("onAddedToFavorites: $channel")
+        viewModel.addToFavorites(channel)
     }
 }
