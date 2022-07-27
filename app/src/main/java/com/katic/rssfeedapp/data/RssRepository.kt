@@ -10,7 +10,7 @@ import com.katic.rssfeedapp.utils.LoadingResult
 import com.katic.rssfeedapp.utils.runCatchCancel
 import timber.log.Timber
 
-class RssRepository(private val service: RssService, private val rssDatabase: RssDatabase) {
+class RssRepository(private val service: RssService, private val database: RssDatabase) {
 
     val rssChannelResult: LiveData<LoadingResult<List<RssChannel>>> get() = _rssChannelResult
     private val _rssChannelResult = MutableLiveData<LoadingResult<List<RssChannel>>>()
@@ -24,15 +24,16 @@ class RssRepository(private val service: RssService, private val rssDatabase: Rs
             run = {
                 url.forEach { url ->
                     var channel = service.getFeed(url).channel
-                    channel = rssDatabase.rssChannelDao().insertOrUpdate(channel)
+                    channel.sourceUrl = url
+                    channel = database.rssChannelDao().insertOrUpdate(channel)
                     channel.item?.also { items ->
-                        rssDatabase.rssItemDao().insert(channel.id!!, items)
+                        database.rssItemDao().insert(channel.id!!, items)
                     }
                 }
 
                 // notify listeners loading is done
                 _rssChannelResult.postValue(
-                    LoadingResult.loaded(rssDatabase.rssChannelDao().getAll())
+                    LoadingResult.loaded(database.rssChannelDao().getAll())
                 )
             },
             catch = { t ->
@@ -48,30 +49,30 @@ class RssRepository(private val service: RssService, private val rssDatabase: Rs
     suspend fun insertChannel(rssChannelAndItems: RssChannelAndItems) {
         Timber.d("insertChannel: $rssChannelAndItems")
 
-        rssDatabase.rssChannelDao().insert(rssChannelAndItems.channel)
-        rssDatabase.rssItemDao().insert(rssChannelAndItems.channel.id!!, rssChannelAndItems.items)
+        database.rssChannelDao().insert(rssChannelAndItems.channel)
+        database.rssItemDao().insert(rssChannelAndItems.channel.id!!, rssChannelAndItems.items)
 
         // notify listeners
         _rssChannelResult.postValue(
-            LoadingResult.loaded(rssDatabase.rssChannelDao().getAll())
+            LoadingResult.loaded(database.rssChannelDao().getAll())
         )
     }
 
     suspend fun removeChannel(rssChannel: RssChannel) {
         Timber.d("removeChannel: $rssChannel")
-        rssDatabase.rssChannelDao().delete(rssChannel)
+        database.rssChannelDao().delete(rssChannel)
         _rssChannelResult.postValue(
-            LoadingResult.loaded(rssDatabase.rssChannelDao().getAll())
+            LoadingResult.loaded(database.rssChannelDao().getAll())
         )
     }
 
     suspend fun setChannelFavorite(channelId: Long, favorite: Boolean) =
-        rssDatabase.rssChannelDao().setFavorite(channelId, favorite)
+        database.rssChannelDao().setFavorite(channelId, favorite)
 
     suspend fun getChannelAndItems(channelId: Long): RssChannelAndItems =
-        rssDatabase.rssChannelDao().getChannelWithItems(channelId)
+        database.rssChannelDao().getChannelWithItems(channelId)
 
     suspend fun getStory(channelId: Long, storyTitle: String): RssItem =
-        rssDatabase.rssItemDao().findByChannelIdAndTitle(channelId, storyTitle)
+        database.rssItemDao().findByChannelIdAndTitle(channelId, storyTitle)
 
 }

@@ -33,6 +33,10 @@ class RssChannel {
     @Attribute
     var favorite: Boolean = false
 
+    @Attribute
+    @ColumnInfo(name = "source_url")
+    var sourceUrl: String? = null
+
     override fun toString(): String {
         return "RssChannel(id=$id, title='$title', description='$description', link='$link', image=$image, item=${item?.size ?: 0}, favorite=$favorite)"
     }
