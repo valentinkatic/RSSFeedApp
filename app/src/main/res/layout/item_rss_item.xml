@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_min="60dp"
+        app:layout_constraintHeight_min="40dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -24,14 +24,6 @@
             android:layout_height="wrap_content"
             android:textSize="18sp"
             tools:text="Title" />
-
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="3"
-            tools:text="Description" />
 
         <TextView
             android:id="@+id/published"

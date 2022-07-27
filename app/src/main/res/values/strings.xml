@@ -17,5 +17,6 @@
     <string name="undo">Undo</string>
 
     <string name="channel_removed">\'%s\' RSS Feed removed</string>
+    <string name="read_more">Read more</string>
 
 </resources>

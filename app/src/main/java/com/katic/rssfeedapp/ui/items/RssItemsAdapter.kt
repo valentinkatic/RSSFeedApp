@@ -1,15 +1,11 @@
 package com.katic.rssfeedapp.ui.items
 
-import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.katic.rssfeedapp.data.model.RssItem
 import com.katic.rssfeedapp.databinding.ItemRssItemBinding
-import com.katic.rssfeedapp.utils.ImageGetter
 import com.katic.rssfeedapp.utils.UiUtils
-import com.katic.rssfeedapp.utils.formatRssDate
 
 class RssItemsAdapter(val listener: Listener) :
     RecyclerView.Adapter<RssItemsAdapter.ViewHolder>() {
@@ -28,17 +24,6 @@ class RssItemsAdapter(val listener: Listener) :
 
             binding.apply {
                 title.text = rssItem.title
-
-                val imageGetter = ImageGetter(root.context, description)
-                // Using Html framework to parse html
-                val styledText = HtmlCompat.fromHtml(
-                    rssItem.description,
-                    HtmlCompat.FROM_HTML_MODE_COMPACT,
-                    imageGetter,
-                    null
-                )
-                // setting the text after formatting html and downloading and setting images
-                description.text = styledText
 
                 published.text = UiUtils.formatPublishedDate(published.context, rssItem.published)
 

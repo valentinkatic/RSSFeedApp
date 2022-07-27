@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.katic.rssfeedapp.data.db.RssDatabase
 import com.katic.rssfeedapp.data.model.RssChannel
 import com.katic.rssfeedapp.data.model.RssChannelAndItems
+import com.katic.rssfeedapp.data.model.RssItem
 import com.katic.rssfeedapp.utils.LoadingResult
 import com.katic.rssfeedapp.utils.runCatchCancel
 import timber.log.Timber
@@ -69,5 +70,8 @@ class RssRepository(private val service: RssService, private val rssDatabase: Rs
 
     suspend fun getChannelAndItems(channelId: Long): RssChannelAndItems =
         rssDatabase.rssChannelDao().getChannelWithItems(channelId)
+
+    suspend fun getStory(channelId: Long, storyTitle: String): RssItem =
+        rssDatabase.rssItemDao().findByChannelIdAndTitle(channelId, storyTitle)
 
 }

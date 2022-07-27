@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/items"
+    app:startDestination="@id/itemsScreen">
+
+    <fragment
+        android:id="@+id/itemsScreen"
+        android:name="com.katic.rssfeedapp.ui.items.RssItemsFragment"
+        android:label="{title}"
+        tools:layout="@layout/fragment_rss_items">
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="channel_id"
+            app:argType="long" />
+
+        <action
+            android:id="@+id/action_items_to_story"
+            app:destination="@id/storyScreen"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/storyScreen"
+        android:name="com.katic.rssfeedapp.ui.story.StoryFragment"
+        android:label="{title}"
+        tools:layout="@layout/fragment_story">
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="channel_id"
+            app:argType="long" />
+    </fragment>
+
+</navigation>

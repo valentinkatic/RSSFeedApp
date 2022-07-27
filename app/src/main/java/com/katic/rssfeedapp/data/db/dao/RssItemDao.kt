@@ -11,8 +11,11 @@ interface RssItemDao {
     @Query("DELETE FROM items WHERE channel_id = :channelId")
     fun deleteChannelItems(channelId: Long)
 
-    @Query("SELECT * FROM items WHERE channel_id LIKE :channelId")
+    @Query("SELECT * FROM items WHERE channel_id = :channelId")
     fun findByChannelId(channelId: Long): List<RssItem>
+
+    @Query("SELECT * FROM items WHERE channel_id = :channelId AND title LIKE :title LIMIT 1")
+    fun findByChannelIdAndTitle(channelId: Long, title: String): RssItem
 
     @Transaction
     suspend fun insert(channelId: Long, items: List<RssItem>) {

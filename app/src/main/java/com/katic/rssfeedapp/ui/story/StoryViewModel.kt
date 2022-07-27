@@ -1,28 +1,30 @@
-package com.katic.rssfeedapp.ui.items
+package com.katic.rssfeedapp.ui.story
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.katic.rssfeedapp.data.RssRepository
-import com.katic.rssfeedapp.data.model.RssChannelAndItems
+import com.katic.rssfeedapp.data.model.RssItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class RssItemsViewModel @Inject constructor(
+class StoryViewModel @Inject constructor(
     private val repository: RssRepository,
-    val channelId: Long
+    private val channelId: Long,
+    private val storyTitle: String
 ) : ViewModel() {
 
-    val rssChannelAndItemsResult: LiveData<RssChannelAndItems> get() = _rssChannelAndItemsResult
-    private val _rssChannelAndItemsResult = MutableLiveData<RssChannelAndItems>()
+    val storyResult: LiveData<RssItem> get() = _storyResult
+    private val _storyResult = MutableLiveData<RssItem>()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            _rssChannelAndItemsResult.postValue(
-                repository.getChannelAndItems(channelId)
+            _storyResult.postValue(
+                repository.getStory(channelId, storyTitle)
             )
         }
     }
+
 }

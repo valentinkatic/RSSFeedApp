@@ -1,12 +1,11 @@
 package com.katic.rssfeedapp.ui.items
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -71,10 +70,8 @@ class RssItemsFragment : Fragment(), RssItemsAdapter.Listener {
 
     override fun onItemSelected(rssItem: RssItem) {
         Timber.d("onItemSelected: $rssItem")
-        if (rssItem.link == null) return
-        val intent = Intent(Intent.ACTION_VIEW).apply {
-            data = Uri.parse(rssItem.link)
-        }
-        startActivity(intent)
+        val story =
+            RssItemsFragmentDirections.actionItemsToStory(rssItem.title, rssItem.channelId!!)
+        findNavController().navigate(story)
     }
 }
