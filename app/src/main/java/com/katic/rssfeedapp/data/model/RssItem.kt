@@ -38,10 +38,15 @@ data class RssItem(
     @ColumnInfo(name = "pub_date")
     val published: Long?,
 
-//    @Element
-//    val category: List<ItemCategory>?
-) {
+    @Attribute
+    var read: Boolean = false
+) : Comparable<RssItem> {
+
+    override fun compareTo(other: RssItem): Int {
+        return ((other.published ?: 0) - (this.published ?: 0)).toInt()
+    }
+
     override fun toString(): String {
-        return "RssItem(channelId=$channelId, title='$title', description='${description.length}', link=$link, published=$published)"
+        return "RssItem(channelId=$channelId, title='$title', description='${description.length}', link=$link, published=$published, read: $read)"
     }
 }

@@ -7,6 +7,12 @@
 
     <string name="dialog_rss_feed_url_title">Enter RSS Feed URL</string>
 
+    <string name="menu_mark_all_read">Mark all stories as read</string>
+    <string name="menu_filter_stories">Filter stories</string>
+    <string name="menu_filter_all">All</string>
+    <string name="menu_filter_read">Read only</string>
+    <string name="menu_filter_unread">Unread only</string>
+
     <string name="error">Error</string>
     <string name="general_error">\"An error occurred, please try again.\"</string>
     <string name="service_error">\"Service error. Please, try again.\"</string>
@@ -17,6 +23,7 @@
     <string name="undo">Undo</string>
 
     <string name="channel_removed">\'%s\' RSS Feed removed</string>
+    <string name="story_removed">\'%s\' story removed</string>
     <string name="read_more">Read more</string>
 
 </resources>

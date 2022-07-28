@@ -5,7 +5,7 @@
     android:id="@+id/feed"
     app:startDestination="@id/channelsScreen">
 
-    <include app:graph="@navigation/items" />
+    <include app:graph="@navigation/stories" />
 
     <fragment
         android:id="@+id/channelsScreen"
@@ -14,7 +14,7 @@
         tools:layout="@layout/fragment_rss_channels">
         <action
             android:id="@+id/action_channel_to_items"
-            app:destination="@id/items"
+            app:destination="@id/stories"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"

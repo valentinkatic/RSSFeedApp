@@ -21,9 +21,10 @@ class StoryViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            _storyResult.postValue(
-                repository.getStory(channelId, storyTitle)
-            )
+            val story = repository.getStory(channelId, storyTitle)
+            story.read = true
+            repository.updateStory(story)
+            _storyResult.postValue(story)
         }
     }
 

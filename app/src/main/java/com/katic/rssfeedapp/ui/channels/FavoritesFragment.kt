@@ -79,8 +79,8 @@ class FavoritesFragment : Fragment(), RssChannelsAdapter.Listener {
 
     override fun onChannelSelected(channel: RssChannel) {
         Timber.d("onChannelSelected: $channel")
-        val items = FavoritesFragmentDirections.actionFavoritesToItems(channel.title, channel.id!!)
-        findNavController().navigate(items)
+        val directions = FavoritesFragmentDirections.actionFavoritesToItems(channel.title, channel.id!!)
+        findNavController().navigate(directions)
     }
 
     override fun onAddedToFavorites(channel: RssChannel) {

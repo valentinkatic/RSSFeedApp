@@ -5,7 +5,7 @@
     android:id="@+id/favorites"
     app:startDestination="@id/favoritesScreen">
 
-    <include app:graph="@navigation/items" />
+    <include app:graph="@navigation/stories" />
 
     <fragment
         android:id="@+id/favoritesScreen"
@@ -14,7 +14,7 @@
         tools:layout="@layout/fragment_favorites">
         <action
             android:id="@+id/action_favorites_to_items"
-            app:destination="@id/items"
+            app:destination="@id/stories"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.katic.rssfeedapp.data.RssRepository
 import com.katic.rssfeedapp.data.model.RssChannel
-import com.katic.rssfeedapp.data.model.RssChannelAndItems
+import com.katic.rssfeedapp.data.model.RssChannelAndStories
 import com.katic.rssfeedapp.utils.LoadingResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -23,7 +23,7 @@ class HomeViewModel @Inject constructor(private val repository: RssRepository) :
             it.data?.filter { channel -> channel.favorite } ?: emptyList()
         }
 
-    private var removedChannel: RssChannelAndItems? = null
+    private var removedChannel: RssChannelAndStories? = null
 
     private var job: Job? = null
 
@@ -56,7 +56,7 @@ class HomeViewModel @Inject constructor(private val repository: RssRepository) :
     fun removeRssChannel(channel: RssChannel) {
         Timber.d("removeRssChannel: $channel")
         viewModelScope.launch(Dispatchers.IO) {
-            removedChannel = repository.getChannelAndItems(channel.id!!)
+            removedChannel = repository.getChannelAndStories(channel.id!!)
             repository.removeChannel(channel)
         }
     }

@@ -2,14 +2,14 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/items"
-    app:startDestination="@id/itemsScreen">
+    android:id="@+id/stories"
+    app:startDestination="@id/storiesScreen">
 
     <fragment
-        android:id="@+id/itemsScreen"
-        android:name="com.katic.rssfeedapp.ui.items.RssItemsFragment"
+        android:id="@+id/storiesScreen"
+        android:name="com.katic.rssfeedapp.ui.stories.StoriesFragment"
         android:label="{title}"
-        tools:layout="@layout/fragment_rss_items">
+        tools:layout="@layout/fragment_stories">
         <argument
             android:name="title"
             app:argType="string" />
@@ -18,7 +18,7 @@
             app:argType="long" />
 
         <action
-            android:id="@+id/action_items_to_story"
+            android:id="@+id/action_stories_to_story"
             app:destination="@id/storyScreen"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"

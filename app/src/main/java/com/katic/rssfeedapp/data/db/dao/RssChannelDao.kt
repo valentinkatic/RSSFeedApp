@@ -2,7 +2,7 @@ package com.katic.rssfeedapp.data.db.dao
 
 import androidx.room.*
 import com.katic.rssfeedapp.data.model.RssChannel
-import com.katic.rssfeedapp.data.model.RssChannelAndItems
+import com.katic.rssfeedapp.data.model.RssChannelAndStories
 
 @Dao
 interface RssChannelDao {
@@ -42,6 +42,6 @@ interface RssChannelDao {
 
     @Transaction
     @Query("SELECT * FROM channels WHERE id = :channelId LIMIT 1")
-    fun getChannelWithItems(channelId: Long): RssChannelAndItems
+    fun getChannelWithStories(channelId: Long): RssChannelAndStories
 
 }

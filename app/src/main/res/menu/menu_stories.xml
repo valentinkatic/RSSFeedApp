@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/mark_all_read"
+        android:title="@string/menu_mark_all_read" />
+
+    <item
+        android:id="@+id/filter"
+        android:icon="@drawable/ic_filter_list"
+        android:title="@string/menu_filter_stories"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/filter_all"
+                android:title="@string/menu_filter_all" />
+
+            <item
+                android:id="@+id/filter_read"
+                android:title="@string/menu_filter_read" />
+
+            <item
+                android:id="@+id/filter_unread"
+                android:title="@string/menu_filter_unread" />
+        </menu>
+    </item>
+
+</menu>
