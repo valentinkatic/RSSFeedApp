@@ -13,6 +13,9 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         viewBinder = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(viewBinder.root)
+
+        supportActionBar?.title = getString(R.string.menu_settings)
+
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.contentFrame, SettingsFragment())
