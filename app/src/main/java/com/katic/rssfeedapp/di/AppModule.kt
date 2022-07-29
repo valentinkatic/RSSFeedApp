@@ -1,10 +1,14 @@
 package com.katic.rssfeedapp.di
 
 import android.content.Context
+import android.content.SharedPreferences
+import androidx.preference.PreferenceManager
 import androidx.room.Room
+import com.katic.rssfeedapp.data.AppPreferences
 import com.katic.rssfeedapp.data.RssRepository
 import com.katic.rssfeedapp.data.RssService
 import com.katic.rssfeedapp.data.db.RssDatabase
+import com.katic.rssfeedapp.notifications.NotificationHandler
 import com.tickaroo.tikxml.TikXml
 import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
 import dagger.Module
@@ -68,7 +72,21 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideRssRepository(rssService: RssService, rssDatabase: RssDatabase) =
-        RssRepository(rssService, rssDatabase)
+    fun provideRssRepository(
+        rssService: RssService,
+        rssDatabase: RssDatabase,
+        appPreferences: AppPreferences,
+        notificationHandler: NotificationHandler
+    ) = RssRepository(rssService, rssDatabase, appPreferences, notificationHandler)
+
+    @Provides
+    @Singleton
+    fun provideAppPreferences(applicationContext: Context): SharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(applicationContext)
+
+    @Provides
+    @Singleton
+    fun provideNotificationHandler(applicationContext: Context): NotificationHandler =
+        NotificationHandler(applicationContext)
 
 }

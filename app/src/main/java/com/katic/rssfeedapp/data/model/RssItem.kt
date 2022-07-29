@@ -39,6 +39,11 @@ data class RssItem(
     val published: Long?,
 
     @Attribute
+    @ColumnInfo(name = "save_date")
+    var saved: Long?,
+
+    @Attribute
+    @ColumnInfo(name = "read_flag")
     var read: Boolean = false
 ) : Comparable<RssItem> {
 

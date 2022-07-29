@@ -3,6 +3,7 @@ package com.katic.rssfeedapp
 import android.app.Application
 import android.content.Context
 import androidx.fragment.app.Fragment
+import com.katic.rssfeedapp.data.RefreshFeedWorker
 import com.katic.rssfeedapp.di.AppComponent
 import com.katic.rssfeedapp.di.DaggerAppComponent
 import timber.log.Timber
@@ -21,6 +22,11 @@ class App : Application() {
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
+        }
+
+        val prefs = appComponent.appPreferences
+        if (prefs.feedRefreshEnabled) {
+            RefreshFeedWorker.initialize(this, prefs.feedRefreshPeriod)
         }
     }
 }

@@ -6,13 +6,20 @@ import com.katic.rssfeedapp.data.db.RssDatabase
 import com.katic.rssfeedapp.data.model.RssChannel
 import com.katic.rssfeedapp.data.model.RssChannelAndStories
 import com.katic.rssfeedapp.data.model.RssItem
+import com.katic.rssfeedapp.notifications.NotificationHandler
 import com.katic.rssfeedapp.utils.LoadingResult
 import com.katic.rssfeedapp.utils.runCatchCancel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import timber.log.Timber
+import java.util.*
 
-class RssRepository(private val service: RssService, private val database: RssDatabase) {
+class RssRepository(
+    private val service: RssService,
+    private val database: RssDatabase,
+    private val preferences: AppPreferences,
+    private val notificationHandler: NotificationHandler
+) {
 
     val rssChannelResult: LiveData<LoadingResult<List<RssChannel>>> get() = _rssChannelResult
     private val _rssChannelResult = MutableLiveData<LoadingResult<List<RssChannel>>>()
@@ -43,6 +50,8 @@ class RssRepository(private val service: RssService, private val database: RssDa
                 _rssChannelResult.postValue(
                     LoadingResult.loaded(database.rssChannelDao().getAll())
                 )
+                countNewAndUnreadStories()
+                preferences.refreshTimestamp = Date().time
             },
             catch = { t ->
                 Timber.e(t, "getChannelFeed error")
@@ -54,7 +63,7 @@ class RssRepository(private val service: RssService, private val database: RssDa
         )
     }
 
-    suspend fun refreshFeed() {
+    suspend fun refreshFeed(showNotificationAfter: Boolean = true) {
         Timber.d("refreshFeed")
         // notify listener loading is in progress
         _rssChannelResult.postValue(LoadingResult.loading(_rssChannelResult.value))
@@ -75,6 +84,10 @@ class RssRepository(private val service: RssService, private val database: RssDa
                 _rssChannelResult.postValue(
                     LoadingResult.loaded(database.rssChannelDao().getAll())
                 )
+                if (showNotificationAfter) {
+                    countNewAndUnreadStories()
+                }
+                preferences.refreshTimestamp = Date().time
             },
             catch = { t ->
                 Timber.e(t, "getChannelFeed error")
@@ -84,6 +97,17 @@ class RssRepository(private val service: RssService, private val database: RssDa
                 Timber.i("getChannelFeed canceled")
             }
         )
+    }
+
+    private fun countNewAndUnreadStories() {
+        Timber.d("countNewAndUnreadStories")
+        database.rssItemDao().also {
+            val unread = it.countUnreadStories()
+            val new = it.countNewStories(preferences.refreshTimestamp)
+            if (unread > 0) {
+                notificationHandler.generateNotificationAndShowIt(unread, new)
+            }
+        }
     }
 
     suspend fun insertChannel(rssChannelAndStories: RssChannelAndStories) {

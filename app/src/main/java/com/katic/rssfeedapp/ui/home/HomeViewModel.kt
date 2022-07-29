@@ -27,6 +27,16 @@ class HomeViewModel @Inject constructor(private val repository: RssRepository) :
 
     private var job: Job? = null
 
+    fun refreshFeed(showNotificationAfter: Boolean) {
+        Timber.d("refreshFeed: showNotificationAfter: $showNotificationAfter")
+
+        job?.cancel()
+
+        job = viewModelScope.launch(Dispatchers.IO) {
+            repository.refreshFeed()
+        }
+    }
+
     fun fetchDummyRssFeed() {
         Timber.d("fetchDummyRssFeed")
 

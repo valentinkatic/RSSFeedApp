@@ -125,6 +125,14 @@ class UiUtils {
                 rssItem.title
             )
         }
+
+        fun formatNotificationMessage(context: Context, unread: Int, new: Int): String {
+            return String.format(
+                context.getString(R.string.notification_message),
+                unread,
+                new
+            )
+        }
     }
 
     fun interface InputDialogListener {

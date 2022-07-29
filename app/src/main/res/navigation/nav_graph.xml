@@ -7,4 +7,14 @@
     <include app:graph="@navigation/feed" />
     <include app:graph="@navigation/favorites" />
 
+    <!--Settings fragment-->
+    <activity
+        android:id="@+id/settingsActivity"
+        android:name="com.katic.rssfeedapp.ui.settings.SettingsActivity" />
+
+    <!--Global action-->
+    <action
+        android:id="@+id/open_settings_activity"
+        app:destination="@id/settingsActivity" />
+
 </navigation>

@@ -1,10 +1,11 @@
 package com.katic.rssfeedapp.ui.channels
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +14,7 @@ import com.katic.rssfeedapp.R
 import com.katic.rssfeedapp.data.model.RssChannel
 import com.katic.rssfeedapp.databinding.FragmentRssChannelsBinding
 import com.katic.rssfeedapp.ui.home.HomeViewModel
+import com.katic.rssfeedapp.ui.settings.SettingsActivityDirections
 import com.katic.rssfeedapp.utils.UiUtils
 import com.katic.rssfeedapp.utils.addOnRemovedListener
 import com.katic.rssfeedapp.utils.viewModelProviderActivity
@@ -37,6 +39,8 @@ class RssChannelsFragment : Fragment(), RssChannelsAdapter.Listener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        initMenu()
 
         binding.recycler.apply {
             val llm = LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
@@ -70,6 +74,31 @@ class RssChannelsFragment : Fragment(), RssChannelsAdapter.Listener {
         }
 
         observeViewModel()
+    }
+
+    private fun initMenu() {
+        val menuHost: MenuHost = requireActivity()
+
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_main, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.settings -> {
+                        val directions = SettingsActivityDirections.openSettingsActivity()
+                        findNavController().navigate(directions)
+                        true
+                    }
+                    R.id.fetch_dummy_feed -> {
+                        viewModel.fetchDummyRssFeed()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private fun observeViewModel() {

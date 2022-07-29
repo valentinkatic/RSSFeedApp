@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="@string/pref_key_parent">
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="@string/pref_key_enable_feed_refresh"
+        android:title="@string/pref_enable_feed_refresh" />
+
+    <EditTextPreference
+        android:defaultValue="15"
+        android:dependency="@string/pref_key_enable_feed_refresh"
+        android:inputType="number"
+        android:key="@string/pref_key_feed_refresh_period"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:title="@string/pref_feed_refresh_period" />
+
+</PreferenceScreen>

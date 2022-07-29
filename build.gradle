@@ -10,6 +10,8 @@ buildscript {
         ver.appcompat = "1.4.2"
         ver.constraintLayout = "2.1.4"
         ver.navigationKtx = "2.5.0"
+        ver.workRuntimeKtx = "2.7.1"
+        ver.preferenceKtx = "1.2.0"
 
         ver.glide = "4.13.2"
 

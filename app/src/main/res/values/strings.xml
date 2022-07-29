@@ -7,11 +7,24 @@
 
     <string name="dialog_rss_feed_url_title">Enter RSS Feed URL</string>
 
+    <string name="notifications_channel_name">Notifications</string>
+    <string name="notification_title">New stories available</string>
+    <string name="notification_message" formatted="false">You have %d unread stories with %d new stories.</string>
+
     <string name="menu_mark_all_read">Mark all stories as read</string>
     <string name="menu_filter_stories">Filter stories</string>
     <string name="menu_filter_all">All</string>
     <string name="menu_filter_read">Read only</string>
     <string name="menu_filter_unread">Unread only</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_fetch_dummy_feed">Fetch dummy feed</string>
+
+    <string name="pref_key_parent" translatable="false">parent</string>
+    <string name="pref_key_enable_feed_refresh" translatable="false">enable_feed_refresh</string>
+    <string name="pref_key_feed_refresh_period" translatable="false">feed_refresh_period</string>
+    <string name="pref_key_refresh_timestamp" translatable="false">refresh_timestamp</string>
+    <string name="pref_enable_feed_refresh">Enable feed refresh</string>
+    <string name="pref_feed_refresh_period">Feed refresh period (in min)</string>
 
     <string name="error">Error</string>
     <string name="general_error">\"An error occurred, please try again.\"</string>

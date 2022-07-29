@@ -1,6 +1,7 @@
 package com.katic.rssfeedapp.di
 
 import android.content.Context
+import com.katic.rssfeedapp.data.AppPreferences
 import com.katic.rssfeedapp.data.RssRepository
 import com.katic.rssfeedapp.ui.home.HomeViewModel
 import dagger.BindsInstance
@@ -25,4 +26,5 @@ interface AppComponent {
 
     val homeViewModel: HomeViewModel
 
+    val appPreferences: AppPreferences
 }

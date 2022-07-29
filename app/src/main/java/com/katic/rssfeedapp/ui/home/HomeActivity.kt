@@ -14,6 +14,10 @@ import com.katic.rssfeedapp.utils.viewModelProvider
 
 class HomeActivity : AppCompatActivity() {
 
+    companion object {
+        const val EXTRA_FROM_NOTIFICATION = "FROM_NOTIFICATION"
+    }
+
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityHomeBinding
 
@@ -22,7 +26,8 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.fetchDummyRssFeed()
+        val fromNotification = intent.getBooleanExtra(EXTRA_FROM_NOTIFICATION, false)
+        viewModel.refreshFeed(showNotificationAfter = !fromNotification)
 
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
